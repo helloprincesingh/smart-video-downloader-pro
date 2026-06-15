@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Video Downloader{% endblock %} - Premium SaaS Downloader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#6366f1">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon"></span>Video Downloader
+            </a>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/logout" class="nav-btn nav-btn-outline">Logout</a></li>
+                    {% else %}
+                        <li><a href="/login" class="nav-btn nav-btn-outline">Login</a></li>
+                        <li><a href="/signup" class="nav-btn nav-btn-primary">Sign Up</a></li>
+                    {% endif %}
+                    <li>
+                        <button id="pwaInstallBtn" class="nav-btn nav-btn-primary" style="display: none; padding: 6px 12px; font-size: 13px; cursor: pointer;">
+                            <i class="fa-solid fa-mobile-screen-button"></i> Install App
+                        </button>
+                    </li>
+                    <li>
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+                            <i class="fa-solid fa-sun" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Flash Messages -->
+        <div class="toast-container" id="toastContainer">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="toast toast-{{ 'success' if category == 'success' or category == 'info' else 'error' }}">
+                            <i class="fa-solid {{ 'fa-circle-check' if category == 'success' or category == 'info' else 'fa-circle-exclamation' }}"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Downloader.io. All rights reserved. Created with premium UI engineering.</p>
+    </footer>
+
+    <!-- Theme toggler logic & PWA Registration -->
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fa-solid fa-sun';
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+            }
+        }
+
+        // Auto fadeout toasts
+        setTimeout(() => {
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            });
+        }, 4000);
+
+        // ── PWA Installation Trigger ─────────────────────────────────────────
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwaInstallBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installBtn) {
+                installBtn.style.display = 'block';
+            }
+        });
+
+        if (installBtn) {
+            installBtn.addEventListener('click', (e) => {
+                installBtn.style.display = 'none';
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('PWA installation accepted');
+                    } else {
+                        console.log('PWA installation dismissed');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                .then(reg => console.log('ServiceWorker registered on scope: ', reg.scope))
+                .catch(err => console.error('ServiceWorker registration failed: ', err));
+            });
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

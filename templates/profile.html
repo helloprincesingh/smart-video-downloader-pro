@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Premium Video Downloader{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 550px;">
+    <div class="glass-card" style="text-align: left; padding: 35px;">
+        <h2 style="font-size: 28px; margin-bottom: 8px; text-align: center; font-family: 'Outfit', sans-serif;">Account Settings</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; text-align: center; margin-bottom: 30px;">Manage your premium account configurations.</p>
+
+        <div style="border-bottom: 1px solid var(--card-border); padding-bottom: 20px; margin-bottom: 25px;">
+            <h4 style="font-size: 16px; margin-bottom: 15px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em;">User Profile</h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 14px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-secondary);">Email Address:</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">{{ current_user.email }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-secondary);">Authentication Provider:</span>
+                    <span style="font-weight: 600; color: var(--success);">
+                        {% if current_user.supabase_uid %}
+                            Supabase Cloud Auth
+                        {% else %}
+                            Local SQLite DB
+                        {% endif %}
+                    </span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-secondary);">Registration Date:</span>
+                    <span style="font-weight: 600; color: var(--text-primary);">{{ current_user.created_at.strftime('%B %d, %Y') }}</span>
+                </div>
+                {% if current_user.supabase_uid %}
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-secondary);">Account ID:</span>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--text-secondary);">{{ current_user.supabase_uid[:18] }}...</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <h4 style="font-size: 16px; margin-bottom: 15px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em;">Change Password</h4>
+            
+            {% if supabase_configured %}
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 15px;">
+                    We use secure Supabase credentials. Click the button below to receive a password reset link at your email.
+                </p>
+                <button id="forgotPasswordLink" class="btn-primary" style="width: 100%; text-align: center; justify-content: center; display: flex;">
+                    <i class="fa-solid fa-envelope" style="margin-right: 8px; margin-top: 2px;"></i> Send Reset Link
+                </button>
+            {% else %}
+                <form action="/reset-password" method="POST">
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Pass config values to global scope for auth.js
+    window.supabaseUrl = "{{ supabase_url }}";
+    window.supabaseAnonKey = "{{ supabase_anon_key }}";
+</script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

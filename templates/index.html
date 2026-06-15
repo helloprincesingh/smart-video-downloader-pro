@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Premium Video Downloader{% endblock %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<section class="hero-section">
+    <h1 class="hero-title">Supercharge Your <span class="gradient-text">Video Downloads</span></h1>
+    <p class="hero-subtitle">Fast, premium-quality video and audio converter. Supports playlists, high-resolution formats, and ad-free conversions instantly.</p>
+    <div class="hero-ctas">
+        <a href="#downloader-main" class="nav-btn nav-btn-primary scroll-link">Get Started Free</a>
+        <a href="#features-section" class="nav-btn nav-btn-outline scroll-link">Explore Features</a>
+    </div>
+</section>
+
+<!-- Stats Showcase Section -->
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-num" id="stat-downloads">148,290+</div>
+            <div class="stat-lbl">Total Downloads</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">24.5K</div>
+            <div class="stat-lbl">Active Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">99.9%</div>
+            <div class="stat-lbl">Success Rate</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num">1.2 TB</div>
+            <div class="stat-lbl">Files Processed</div>
+        </div>
+    </div>
+</section>
+
+<!-- Downloader Card Section -->
+<div class="downloader-anchor" id="downloader-main"></div>
+<div class="glass-card" style="margin-top: 40px;">
+    <div class="input-wrapper">
+        <i class="fa-solid fa-link input-icon"></i>
+        <input type="text" id="videoUrl" class="url-input" placeholder="Paste YouTube video or playlist URL here..." required>
+        <button id="fetchBtn" class="search-btn">
+            <span>Fetch Details</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- Error container -->
+    <div id="errorBox" style="display: none; color: var(--danger); margin-bottom: 20px; text-align: left; font-size: 14px;">
+        <i class="fa-solid fa-circle-xmark"></i> <span id="errorMsg">Error message here</span>
+    </div>
+
+    <!-- Skeleton Loader (Initially hidden) -->
+    <div id="skeletonLoader" style="display: none; margin-top: 30px; border-top: 1px solid var(--card-border); padding-top: 30px;">
+        <div class="skeleton-wrapper">
+            <div class="skeleton skeleton-thumb"></div>
+            <div style="display: flex; flex-direction: column; gap: 15px; flex: 1;">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text" style="width: 50%;"></div>
+                <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                <div class="skeleton skeleton-btn"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Info Panel (Initially hidden) -->
+    <div id="metadataContainer" style="display: none;">
+        <!-- Playlist details or Single Video Details rendered by JS -->
+    </div>
+
+    <!-- Single Download Progress (Initially hidden) -->
+    <div id="progressContainer" style="display: none;">
+        <div class="progress-card">
+            <div class="progress-header">
+                <span class="progress-title" id="progressTitle">Downloading...</span>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" id="progressBarFill"></div>
+            </div>
+            <div class="progress-footer">
+                <span id="progressSpeed"><i class="fa-solid fa-gauge-high"></i> Speed: -- MB/s</span>
+                <span id="progressSizes">-- / -- MB</span>
+                <span id="progressEta"><i class="fa-solid fa-clock"></i> ETA: --</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Active Queues Panel (Always visible if jobs exist) -->
+<div id="queueSection" class="glass-card" style="margin-top: 30px; display: none;">
+    <h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; margin-bottom: 15px; text-align: left;"><i class="fa-solid fa-list-check" style="color:var(--primary); margin-right: 8px;"></i> Active Download Queue</h3>
+    <div id="queueList" class="item-list">
+        <!-- Queues are rendered dynamically here -->
+    </div>
+</div>
+
+<!-- Features Section -->
+<section class="features-container" id="features-section">
+    <h2 class="features-title">Why Choose <span class="gradient-text">Downloader.io</span></h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-file-video"></i></div>
+            <h3>HD Downloads</h3>
+            <p>Fetch crystal clear videos up to 1080p and 4K resolutions with seamless audio merging.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-list"></i></div>
+            <h3>Playlist Support</h3>
+            <p>Paste any YouTube playlist link to parse, view, and queue all tracks sequentially.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-music"></i></div>
+            <h3>MP3 Conversion</h3>
+            <p>Extract high fidelity audio directly into 192kbps MP3 sound files instantly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-closed-captioning"></i></div>
+            <h3>Subtitle Download</h3>
+            <p>Automatically fetch English or translated subtitles side-by-side with your media downloads.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+            <h3>Fast Processing</h3>
+            <p>Utilizes background thread queues and high bandwidth server pipes for swift downloads.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3>Secure Downloads</h3>
+            <p>Ad-free, tracker-free processing protects your privacy and device integrity.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('.scroll-link').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+{% endblock %}

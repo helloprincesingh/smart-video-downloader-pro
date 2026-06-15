@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Premium Video Downloader{% endblock %}
+
+{% block content %}
+<div class="hero" style="margin-bottom: 30px;">
+    <h1>SaaS Analytics Dashboard</h1>
+    <p>Monitor your download metrics, saved favorites, storage analytics, and queue logs in one place.</p>
+</div>
+
+<!-- 4 Premium KPI Stats Cards -->
+<section class="stats-section" style="margin-bottom: 40px; padding: 0;">
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div class="stat-card" style="padding: 20px; display: flex; align-items: center; gap: 15px; text-align: left;">
+            <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: var(--primary); font-size: 24px; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+            </div>
+            <div>
+                <div class="stat-lbl" style="font-size: 11px; margin-bottom: 2px;">Total Downloads</div>
+                <div class="stat-num" style="font-size: 24px; font-weight: 800; font-family:'Outfit';">{{ total_downloads }}</div>
+            </div>
+        </div>
+        
+        <div class="stat-card" style="padding: 20px; display: flex; align-items: center; gap: 15px; text-align: left;">
+            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success); font-size: 24px; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-hard-drive"></i>
+            </div>
+            <div>
+                <div class="stat-lbl" style="font-size: 11px; margin-bottom: 2px;">Data Downloaded</div>
+                <div class="stat-num" style="font-size: 24px; font-weight: 800; font-family:'Outfit';">{{ total_data_gb }} GB</div>
+            </div>
+        </div>
+
+        <div class="stat-card" style="padding: 20px; display: flex; align-items: center; gap: 15px; text-align: left;">
+            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--secondary); font-size: 24px; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div>
+                <div class="stat-lbl" style="font-size: 11px; margin-bottom: 2px;">Favorites Saved</div>
+                <div class="stat-num" style="font-size: 24px; font-weight: 800; font-family:'Outfit';">{{ total_favorites }}</div>
+            </div>
+        </div>
+
+        <div class="stat-card" style="padding: 20px; display: flex; align-items: center; gap: 15px; text-align: left;">
+            <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning); font-size: 24px; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+                <div class="stat-lbl" style="font-size: 11px; margin-bottom: 2px;">Success Rate</div>
+                <div class="stat-num" style="font-size: 24px; font-weight: 800; font-family:'Outfit';">{{ success_rate }}%</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Main Layout -->
+<div class="dashboard-grid" style="grid-template-columns: 1fr; gap: 30px;">
+    
+    <!-- Chart Analytics Block -->
+    <div class="glass-card" style="max-width: 100%; text-align: left; padding: 25px;">
+        <h3 style="font-family: 'Outfit'; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> Download Activity (Last 6 Months)
+        </h3>
+        <div style="height: 250px; width: 100%; position: relative;">
+            <canvas id="activityChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Main List Tabs Block -->
+    <div class="glass-card" style="max-width: 100%; text-align: left; padding: 25px;">
+        <div class="tabs-header" style="margin-bottom: 20px;">
+            <button class="tab-btn active" id="historyTabBtn">Downloads History</button>
+            <button class="tab-btn" id="favoritesTabBtn">Favorite Videos</button>
+        </div>
+
+        <!-- History Tab Content -->
+        <div id="historyTabContent" class="item-list">
+            
+            <!-- Filters & Search Controls -->
+            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                <div class="input-wrapper" style="flex: 1; min-width: 200px; margin-bottom: 0; padding: 4px 12px; border-radius: 10px; background: var(--input-bg);">
+                    <i class="fa-solid fa-magnifying-glass" style="color:var(--text-secondary); margin-right: 6px;"></i>
+                    <input type="text" id="historySearchInput" class="url-input" placeholder="Search by video title..." style="font-size: 14px; padding: 8px 0;">
+                </div>
+                
+                <select id="historyFormatFilter" class="select-control" style="width: 160px; border-radius: 10px;">
+                    <option value="">All Formats</option>
+                    <option value="video">Videos (MP4)</option>
+                    <option value="audio">Audios (MP3)</option>
+                </select>
+                
+                <button id="historyFilterBtn" class="search-btn" style="padding: 10px 20px; font-size: 14px; border-radius: 10px;">
+                    Apply Filters
+                </button>
+            </div>
+
+            <!-- Dynamic History List container -->
+            <div id="historyItemsContainer" class="item-list">
+                <!-- History Items will be rendered by JS -->
+                <p style="color: var(--text-secondary); text-align: center; padding: 30px;">Loading history...</p>
+            </div>
+        </div>
+
+        <!-- Favorites Tab Content -->
+        <div id="favoritesTabContent" class="item-list" style="display: none;">
+            <div id="favoritesItemsContainer" class="item-list">
+                <!-- Favorites Items will be rendered by JS -->
+                <p style="color: var(--text-secondary); text-align: center; padding: 30px;">Loading favorites...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Tab Switching Logic
+    const historyTabBtn = document.getElementById('historyTabBtn');
+    const favoritesTabBtn = document.getElementById('favoritesTabBtn');
+    const historyTabContent = document.getElementById('historyTabContent');
+    const favoritesTabContent = document.getElementById('favoritesTabContent');
+
+    historyTabBtn.addEventListener('click', () => {
+        historyTabBtn.classList.add('active');
+        favoritesTabBtn.classList.remove('active');
+        historyTabContent.style.display = 'flex';
+        favoritesTabContent.style.display = 'none';
+        loadHistory();
+    });
+
+    favoritesTabBtn.addEventListener('click', () => {
+        favoritesTabBtn.classList.add('active');
+        historyTabBtn.classList.remove('active');
+        historyTabContent.style.display = 'none';
+        favoritesTabContent.style.display = 'flex';
+        loadFavorites();
+    });
+
+    // ── 1. Render Chart.js Chart ─────────────────────────────────────────────
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    const chartLabels = {{ chart_labels | tojson }};
+    const chartData = {{ chart_data | tojson }};
+    
+    // Check local theme colors
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(99, 102, 241, 0.06)';
+    const textColor = isDark ? '#9ca3af' : '#4b5563';
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Downloads',
+                data: chartData,
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.15)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#8b5cf6',
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Inter' } }
+                },
+                y: {
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, precision: 0 },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // ── 2. History Operations ───────────────────────────────────────────────
+    const historySearchInput = document.getElementById('historySearchInput');
+    const historyFormatFilter = document.getElementById('historyFormatFilter');
+    const historyFilterBtn = document.getElementById('historyFilterBtn');
+    const historyItemsContainer = document.getElementById('historyItemsContainer');
+
+    historyFilterBtn.addEventListener('click', loadHistory);
+    historySearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') loadHistory();
+    });
+
+    function loadHistory() {
+        const searchVal = encodeURIComponent(historySearchInput.value.trim());
+        const formatVal = encodeURIComponent(historyFormatFilter.value);
+        
+        historyItemsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 30px;"><span class="spinner"></span> Loading history...</p>';
+
+        fetch(`/api/history?search=${searchVal}&format=${formatVal}`)
+        .then(res => res.json())
+        .then(data => {
+            historyItemsContainer.innerHTML = '';
+            if (data.length === 0) {
+                historyItemsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 30px;">No downloads found matching filters.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const icon = item.format === 'audio' ? 'fa-music' : 'fa-video';
+                historyItemsContainer.innerHTML += `
+                    <div class="history-item card-hover" id="hist-item-${item.id}">
+                        <div class="item-left">
+                            <img src="${item.thumbnail || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=200&auto=format&fit=crop'}" class="item-thumb" alt="video thumbnail">
+                            <div class="item-info">
+                                <h4 title="${item.title}">${item.title}</h4>
+                                <p>
+                                    <span><i class="fa-solid ${icon}"></i> ${item.quality}</span>
+                                    <span><i class="fa-solid fa-weight-hanging"></i> ${item.size_mb || 'N/A'} MB</span>
+                                    <span><i class="fa-solid fa-calendar-days"></i> ${item.downloaded_at}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <button onclick="downloadFavorite('${item.url}')" class="nav-btn nav-btn-primary" style="padding: 6px 12px; font-size: 12px; border:none; cursor:pointer;"><i class="fa-solid fa-rotate-right"></i> Re-download</button>
+                            <button onclick="deleteHistory(${item.id})" class="nav-btn nav-btn-outline" style="padding: 6px 12px; font-size: 12px; border: 1px solid var(--danger); color: var(--danger) !important; background: transparent; cursor:pointer;"><i class="fa-solid fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            historyItemsContainer.innerHTML = '<p style="color: var(--danger); text-align: center; padding: 30px;">Failed to load history.</p>';
+        });
+    }
+
+    function deleteHistory(histId) {
+        if (!confirm('Are you sure you want to delete this item from your history logs?')) return;
+        
+        fetch(`/api/history/${histId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const el = document.getElementById(`hist-item-${histId}`);
+            if (el) el.remove();
+        })
+        .catch(err => console.error(err));
+    }
+
+    // ── 3. Favorites Operations ──────────────────────────────────────────────
+    const favoritesItemsContainer = document.getElementById('favoritesItemsContainer');
+
+    function loadFavorites() {
+        favoritesItemsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 30px;"><span class="spinner"></span> Loading favorites...</p>';
+
+        fetch('/api/favorites')
+        .then(res => res.json())
+        .then(data => {
+            favoritesItemsContainer.innerHTML = '';
+            if (data.length === 0) {
+                favoritesItemsContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 30px;">No favorites added yet. Bookmark videos you love!</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                favoritesItemsContainer.innerHTML += `
+                    <div class="history-item card-hover" id="fav-item-${item.id}">
+                        <div class="item-left">
+                            <img src="${item.thumbnail || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=200&auto=format&fit=crop'}" class="item-thumb" alt="video thumbnail">
+                            <div class="item-info">
+                                <h4 title="${item.title}">${item.title}</h4>
+                                <p>
+                                    <span><i class="fa-solid fa-user"></i> ${item.channel || 'Unknown'}</span>
+                                    <span><i class="fa-solid fa-clock"></i> ${item.duration || 'N/A'}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <button onclick="downloadFavorite('${item.url}')" class="nav-btn nav-btn-primary" style="padding: 6px 12px; font-size: 12px; border: none; cursor: pointer;"><i class="fa-solid fa-download"></i> Download</button>
+                            <button onclick="removeFavorite(${item.id})" class="nav-btn nav-btn-outline" style="padding: 6px 12px; font-size: 12px; border: 1px solid var(--danger); color: var(--danger) !important; background: transparent; cursor: pointer;"><i class="fa-solid fa-trash"></i> Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            favoritesItemsContainer.innerHTML = '<p style="color: var(--danger); text-align: center; padding: 30px;">Failed to load favorites.</p>';
+        });
+    }
+
+    function removeFavorite(favId) {
+        if (!confirm('Remove this video from your favorites?')) return;
+        
+        fetch(`/api/favorites/${favId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const el = document.getElementById(`fav-item-${favId}`);
+            if (el) el.remove();
+        })
+        .catch(err => console.error(err));
+    }
+
+    window.downloadFavorite = function(url) {
+        window.location.href = `/?url=${encodeURIComponent(url)}#downloader-main`;
+    }
+
+    // Load history when dashboard page opens
+    loadHistory();
+</script>
+{% endblock %}

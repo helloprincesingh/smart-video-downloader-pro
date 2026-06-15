@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Download Ready</title>
+
+<style>
+body{
+    background: linear-gradient(135deg,#020617,#020617,#0f172a);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial;
+}
+
+.box{
+    background:rgba(255,255,255,0.05);
+    padding:40px;
+    border-radius:18px;
+    text-align:center;
+    backdrop-filter: blur(14px);
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+    width:350px;
+}
+
+a{
+    display:inline-block;
+    margin-top:20px;
+    padding:14px 25px;
+    background:#22c55e;
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+    font-size:18px;
+    transition:0.3s;
+}
+
+a:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 18px #22c55e;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>✅ Your file is ready!</h2>
+<p>Click below to download</p>
+
+<a href="{{ url_for('file', filename=filename) }}">⬇ Download Now</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+2026-06-15 05:02:34,431 [INFO] Task 54206233-2498-44d7-950e-06112e89dfbe added to queue. URL: https://youtu.be/Kx4c66-GjgE?si=8_2Sk-UQXS87hMQt, Quality: 360, AudioOnly: False
+2026-06-15 05:02:34,523 [INFO] Task 54206233-2498-44d7-950e-06112e89dfbe popped from queue to start downloading.
+2026-06-15 05:02:47,346 [INFO] Task 54206233-2498-44d7-950e-06112e89dfbe pausing requested.
+2026-06-15 05:02:50,703 [INFO] Task 54206233-2498-44d7-950e-06112e89dfbe pausing requested.
+2026-06-15 05:02:56,229 [INFO] Task 54206233-2498-44d7-950e-06112e89dfbe pausing requested.
+2026-06-15 05:04:42,734 [INFO] Task d2d7bd89-c2c0-4759-930b-2b611d642bd1 added to queue. URL: https://youtu.be/Kx4c66-GjgE?si=8_2Sk-UQXS87hMQt, Quality: 360, AudioOnly: False
+2026-06-15 05:04:42,771 [INFO] Task d2d7bd89-c2c0-4759-930b-2b611d642bd1 popped from queue to start downloading.
+2026-06-15 05:05:30,077 [INFO] Task 07e8476f-924b-4cea-a193-f34f0fe824dc added to queue. URL: https://youtu.be/Kx4c66-GjgE?si=8_2Sk-UQXS87hMQt, Quality: 360, AudioOnly: False
+2026-06-15 05:21:40,776 [ERROR] Task 54206233-2498-44d7-950e-06112e89dfbe failed. Friendly Error: [0;31mERROR:[0m [download] Got error: <urllib3.connection.HTTPSConnection object at 0x0000019196EB7140>: Failed to establish a new connection: [WinError 10053] An established connection was aborted by the software in your host machine. Giving up after 10 retries. Details: [0;31mERROR:[0m [download] Got error: <urllib3.connection.HTTPSConnection object at 0x0000019196EB7140>: Failed to establish a new connection: [WinError 10053] An established connection was aborted by the software in your host machine. Giving up after 10 retries
+2026-06-15 05:21:40,778 [INFO] Task 07e8476f-924b-4cea-a193-f34f0fe824dc popped from queue to start downloading.
+2026-06-15 05:21:41,616 [ERROR] Task d2d7bd89-c2c0-4759-930b-2b611d642bd1 failed. Friendly Error: [0;31mERROR:[0m [download] Got error: <urllib3.connection.HTTPSConnection object at 0x000001919702A720>: Failed to resolve 'rr4---sn-8vq54voxpo-25ue.googlevideo.com' ([Errno 11001] getaddrinfo failed). Giving up after 10 retries. Details: [0;31mERROR:[0m [download] Got error: <urllib3.connection.HTTPSConnection object at 0x000001919702A720>: Failed to resolve 'rr4---sn-8vq54voxpo-25ue.googlevideo.com' ([Errno 11001] getaddrinfo failed). Giving up after 10 retries
+2026-06-16 01:36:17,247 [INFO] Task 72d91c73-fe31-4a68-82e3-a0e6f2c6a543 added to queue. URL: https://youtu.be/Kx4c66-GjgE?si=v6qkC1YNrouU2wqB, Quality: 360, AudioOnly: False
+2026-06-16 01:36:18,264 [INFO] Task 72d91c73-fe31-4a68-82e3-a0e6f2c6a543 popped from queue to start downloading.
+2026-06-16 01:40:20,760 [ERROR] Task 72d91c73-fe31-4a68-82e3-a0e6f2c6a543 failed. Friendly Error: Connection to YouTube timed out. Please try again.. Details: [0;31mERROR:[0m [download] Got error: (<urllib3.connection.HTTPSConnection object at 0x000001D6FD24FEC0>, 'Connection to rr4---sn-8vq54voxpo-25ue.googlevideo.com timed out. (connect timeout=30.0)'). Giving up after 10 retries
+2026-06-16 01:41:07,585 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 added to queue. URL: https://youtube.com/shorts/9zNW8uf_Jd4?si=zKy408ItUaduOHqT, Quality: 1080, AudioOnly: False
+2026-06-16 01:41:07,617 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 popped from queue to start downloading.
+2026-06-16 01:41:12,183 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 0.1% | Speed: 169.5 KB/s | Size: 0.0MB/2.21MB | ETA: 00:13
+2026-06-16 01:41:12,426 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 11.3% | Speed: 969.9 KB/s | Size: 0.25MB/2.21MB | ETA: 00:02
+2026-06-16 01:41:12,565 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 22.6% | Speed: 1.2 MB/s | Size: 0.5MB/2.21MB | ETA: 00:01
+2026-06-16 01:41:12,841 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 43.5% | Speed: 1.4 MB/s | Size: 0.96MB/2.21MB | ETA: 00:00
+2026-06-16 01:41:13,377 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 54.8% | Speed: 968.4 KB/s | Size: 1.21MB/2.21MB | ETA: 00:01
+2026-06-16 01:41:13,570 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 66.1% | Speed: 1.1 MB/s | Size: 1.46MB/2.21MB | ETA: 00:00
+2026-06-16 01:41:13,881 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 86.8% | Speed: 1.2 MB/s | Size: 1.91MB/2.21MB | ETA: 00:00
+2026-06-16 01:41:14,444 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 98.0% | Speed: 991.7 KB/s | Size: 2.16MB/2.21MB | ETA: 00:00
+2026-06-16 01:41:14,486 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 progress: 100.0% | Speed: 1001.5 KB/s | Size: 2.21MB/2.21MB | ETA: 00:00
+2026-06-16 01:41:14,497 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 finished downloading. Post-processing/merging formats...
+2026-06-16 01:41:14,571 [INFO] Task 5bd005e0-8b29-40f9-9e5e-2afe294ead89 completed successfully. Filename: Sheesha ❤️ ｜ sheesha haryanvi song ｜ romantic song ｜ #shorts #viral #trending #song.mp4, Size: 2.21 MB
+2026-06-16 01:44:21,703 [INFO] Task 33612b01-8f1b-4238-9210-09a9272b9275 added to queue. URL: https://youtu.be/ri1Ar5nEq4s?si=Ki5AQ8Jd-xFaol8l, Quality: 360, AudioOnly: False
+2026-06-16 01:44:21,733 [INFO] Task 33612b01-8f1b-4238-9210-09a9272b9275 popped from queue to start downloading.
+2026-06-16 01:44:27,090 [INFO] Task 33612b01-8f1b-4238-9210-09a9272b9275 finished downloading. Post-processing/merging formats...
+2026-06-16 01:44:27,199 [INFO] Task 33612b01-8f1b-4238-9210-09a9272b9275 completed successfully. Filename: Aaj Ki Raat - 8K Video ｜ Stree 2 ｜ Tamannaah Bhatia, Rajkummar Rao, Sachin-Jigar, Madhubanti B,Divya.mp4, Size: 1411.85 MB
+2026-06-16 02:15:51,614 [INFO] Task 02c116b1-e305-43bd-9f9b-9903b6f3bcdd added to queue. URL: https://youtube.com/shorts/D43odnfIeAU?si=aGh7S3HjxyPeEvaM, Quality: 1080, AudioOnly: False
+2026-06-16 02:15:51,684 [INFO] Task 02c116b1-e305-43bd-9f9b-9903b6f3bcdd popped from queue to start downloading.
+2026-06-16 02:16:02,696 [INFO] Task 50abdae2-9d83-4e78-afbc-34e37c9a3681 added to queue. URL: https://youtube.com/shorts/D43odnfIeAU?si=aGh7S3HjxyPeEvaM, Quality: 1080, AudioOnly: False
+2026-06-16 02:16:02,741 [INFO] Task 50abdae2-9d83-4e78-afbc-34e37c9a3681 popped from queue to start downloading.
+2026-06-16 02:16:09,460 [INFO] Task 02c116b1-e305-43bd-9f9b-9903b6f3bcdd finished downloading. Post-processing/merging formats...
+2026-06-16 02:16:09,551 [INFO] Task 02c116b1-e305-43bd-9f9b-9903b6f3bcdd completed successfully. Filename: 🙏🏻Hare ka sahara baba syam hamara🙏🏻#khatushyam #khatu #khatudham.mp4, Size: 1.44 MB
+2026-06-16 02:16:25,103 [INFO] Task 50abdae2-9d83-4e78-afbc-34e37c9a3681 finished downloading. Post-processing/merging formats...
+2026-06-16 02:16:25,181 [INFO] Task 50abdae2-9d83-4e78-afbc-34e37c9a3681 completed successfully. Filename: 🙏🏻Hare ka sahara baba syam hamara🙏🏻#khatushyam #khatu #khatudham.mp4, Size: 1.44 MB
