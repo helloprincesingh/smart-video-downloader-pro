@@ -1,8 +1,14 @@
-**/.venv
+.venv/
+venv/
+venv_new/
+
 __pycache__/
-*.pyc
-*.pyo
+.pytest_cache/
+
 instance/
 downloads/
+
 .env
 *.db
+*.pyc
+*.pyo
