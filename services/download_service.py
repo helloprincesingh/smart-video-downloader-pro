@@ -74,11 +74,17 @@ class DownloadService:
                 'quiet': True,
                 'no_warnings': True,
                 'skip_download': True,
+                'extractor_args': {
+                    'youtube': {
+                        'player_client': ['web', 'android']
+                    }
+                }
             }
             with yt_dlp.YoutubeDL(full_opts) as ydl:
                 info = ydl.extract_info(url, download=False)
 
             formats = info.get('formats', [])
+            print("TOTAL FORMATS FOUND:", len(formats))
             qualities = []
             seen_heights = set()
 
@@ -192,6 +198,16 @@ class DownloadService:
             'progress_hooks': [hook],
             'quiet': True,
             'no_warnings': True,
+
+            'socket_timeout': 120,
+            'retries': 20,
+            'fragment_retries': 20,
+
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['web', 'android']
+                }
+            }
         }
 
         if audio_only:
@@ -205,7 +221,7 @@ class DownloadService:
             })
         else:
             ydl_opts.update({
-                'format': f'bestvideo[height<={quality}]+bestaudio/best',
+                'format': f'bv*[height<={quality}]+ba/b',
                 'merge_output_format': 'mp4',
             })
 

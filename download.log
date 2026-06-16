@@ -60,3 +60,85 @@
 2026-06-16 22:48:21,827 [INFO] Task e3ed6cbd-93e4-47ae-a679-f255ee53d4ad popped from queue to start downloading.
 2026-06-16 22:48:26,997 [INFO] Task e3ed6cbd-93e4-47ae-a679-f255ee53d4ad finished downloading. Post-processing/merging formats...
 2026-06-16 22:48:27,089 [INFO] Task e3ed6cbd-93e4-47ae-a679-f255ee53d4ad completed successfully. Filename: #sunandasharma #dhurandhar2 #trend.mp4, Size: 1.36 MB
+2026-06-17 01:33:24,112 [INFO] Task a0d336f5-bd0a-48f0-aa2c-0613a512f7d9 added to queue. URL: https://youtube.com/shorts/KDh7-bpnKY0?si=UxG6KogEeRa1qiFs, Quality: 1080, AudioOnly: False
+2026-06-17 01:33:24,182 [INFO] Task a0d336f5-bd0a-48f0-aa2c-0613a512f7d9 popped from queue to start downloading.
+2026-06-17 01:33:31,097 [INFO] Task a0d336f5-bd0a-48f0-aa2c-0613a512f7d9 finished downloading. Post-processing/merging formats...
+2026-06-17 01:33:31,193 [INFO] Task a0d336f5-bd0a-48f0-aa2c-0613a512f7d9 completed successfully. Filename: #sunandasharma #dhurandhar2 #trend.mp4, Size: 1.36 MB
+2026-06-17 01:38:27,429 [INFO] Task ba870d53-efbc-4ea0-8a6f-1ff5d438b7f4 added to queue. URL: https://youtu.be/5EDWv-CucvY?si=zspfK78SXw_DUH5_, Quality: 360, AudioOnly: False
+2026-06-17 01:38:27,457 [INFO] Task ba870d53-efbc-4ea0-8a6f-1ff5d438b7f4 popped from queue to start downloading.
+2026-06-17 01:57:49,134 [INFO] Task 03d641aa-495e-4607-841a-346021f5221d added to queue. URL: https://youtu.be/5EDWv-CucvY?si=AigMNEnwXLkUVC25, Quality: 360, AudioOnly: False
+2026-06-17 01:57:49,192 [INFO] Task 03d641aa-495e-4607-841a-346021f5221d popped from queue to start downloading.
+2026-06-17 01:58:25,273 [INFO] Task 1ecb0d5e-ba40-4487-a5d0-22885a7588ec added to queue. URL: https://youtu.be/5EDWv-CucvY?si=AigMNEnwXLkUVC25, Quality: 360, AudioOnly: False
+2026-06-17 01:58:25,304 [INFO] Task 1ecb0d5e-ba40-4487-a5d0-22885a7588ec popped from queue to start downloading.
+2026-06-17 02:01:47,559 [ERROR] Task 03d641aa-495e-4607-841a-346021f5221d failed. Friendly Error: Connection to YouTube timed out. Please try again.. Details: [0;31mERROR:[0m [download] Got error: (<HTTPSConnection(host='rr3---sn-8vq54voxpo-25ue.googlevideo.com', port=443) at 0x25d66c171d0>, 'Connection to rr3---sn-8vq54voxpo-25ue.googlevideo.com timed out. (connect timeout=30.0)'). Giving up after 10 retries
+2026-06-17 02:02:22,343 [ERROR] Task 1ecb0d5e-ba40-4487-a5d0-22885a7588ec failed. Friendly Error: Connection to YouTube timed out. Please try again.. Details: [0;31mERROR:[0m [download] Got error: (<HTTPSConnection(host='rr3---sn-8vq54voxpo-25ue.googlevideo.com', port=443) at 0x25d66bcde50>, 'Connection to rr3---sn-8vq54voxpo-25ue.googlevideo.com timed out. (connect timeout=30.0)'). Giving up after 10 retries
+2026-06-17 02:25:28,304 [INFO] Task d0c2ff1c-3806-4e57-9185-436b6d5a32f8 added to queue. URL: https://youtu.be/Ac20NC8DqR0?si=si5sg7NXaoWT-8H-, Quality: 360, AudioOnly: False
+2026-06-17 02:25:28,377 [ERROR] Queue analytics log error for task d0c2ff1c-3806-4e57-9185-436b6d5a32f8: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/Ac20NC8DqR0?si=si5sg7NXaoWT-8H-', '2026-06-16 20:55:28.365298')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 02:25:28,379 [INFO] Task d0c2ff1c-3806-4e57-9185-436b6d5a32f8 popped from queue to start downloading.
+2026-06-17 02:25:28,487 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:26:09,018 [INFO] Task 3323cbab-4ea2-46fe-bc9c-e5a8c245a338 added to queue. URL: https://youtu.be/Ac20NC8DqR0?si=si5sg7NXaoWT-8H-, Quality: 360, AudioOnly: False
+2026-06-17 02:26:09,024 [ERROR] Queue analytics log error for task 3323cbab-4ea2-46fe-bc9c-e5a8c245a338: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/Ac20NC8DqR0?si=si5sg7NXaoWT-8H-', '2026-06-16 20:56:09.022508')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 02:26:09,026 [INFO] Task 3323cbab-4ea2-46fe-bc9c-e5a8c245a338 popped from queue to start downloading.
+2026-06-17 02:26:09,123 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:31:10,695 [ERROR] Task d0c2ff1c-3806-4e57-9185-436b6d5a32f8 failed. Friendly Error: Connection to YouTube timed out. Please try again.. Details: [0;31mERROR:[0m [download] Got error: (<HTTPSConnection(host='rr2---sn-8vq54voxpo-25ue.googlevideo.com', port=443) at 0x179f0be7710>, 'Connection to rr2---sn-8vq54voxpo-25ue.googlevideo.com timed out. (connect timeout=30.0)'). Giving up after 15 retries
+2026-06-17 02:31:51,357 [ERROR] Task 3323cbab-4ea2-46fe-bc9c-e5a8c245a338 failed. Friendly Error: Connection to YouTube timed out. Please try again.. Details: [0;31mERROR:[0m [download] Got error: (<HTTPSConnection(host='rr2---sn-8vq54voxpo-25ue.googlevideo.com', port=443) at 0x179f170df70>, 'Connection to rr2---sn-8vq54voxpo-25ue.googlevideo.com timed out. (connect timeout=30.0)'). Giving up after 15 retries
+2026-06-17 02:41:32,973 [INFO] Task 19d593ed-a517-4ce7-8c4e-ade06d202bb0 added to queue. URL: https://youtube.com/shorts/KDh7-bpnKY0?si=UxG6KogEeRa1qiFs, Quality: 1080, AudioOnly: False
+2026-06-17 02:41:33,074 [INFO] Task 19d593ed-a517-4ce7-8c4e-ade06d202bb0 popped from queue to start downloading.
+2026-06-17 02:41:33,169 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:41:38,947 [INFO] Task 19d593ed-a517-4ce7-8c4e-ade06d202bb0 finished downloading. Post-processing/merging formats...
+2026-06-17 02:41:39,187 [INFO] Task 19d593ed-a517-4ce7-8c4e-ade06d202bb0 completed successfully. Filename: #sunandasharma #dhurandhar2 #trend.mp4, Size: 1.36 MB
+2026-06-17 02:42:47,499 [INFO] Task f3c69231-5f56-41e1-b892-7e51b02bd72d added to queue. URL: https://youtu.be/WELRx3_x9jw?si=G5H0tXHcizJoFMdn, Quality: 360, AudioOnly: False
+2026-06-17 02:42:47,536 [INFO] Task f3c69231-5f56-41e1-b892-7e51b02bd72d popped from queue to start downloading.
+2026-06-17 02:42:47,612 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:44:29,130 [INFO] Task 03fa3ff9-bb49-4ebd-a417-baa84ce79b8b added to queue. URL: https://youtu.be/WELRx3_x9jw?si=G5H0tXHcizJoFMdn, Quality: 360, AudioOnly: False
+2026-06-17 02:44:29,168 [INFO] Task 03fa3ff9-bb49-4ebd-a417-baa84ce79b8b popped from queue to start downloading.
+2026-06-17 02:44:29,248 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:49:10,611 [INFO] Task 2af76a99-f536-41ed-9207-1675843dbc37 added to queue. URL: https://youtu.be/5EDWv-CucvY?si=i1dMwl8UPMe5YaOG, Quality: 360, AudioOnly: False
+2026-06-17 02:49:10,648 [ERROR] Queue analytics log error for task 2af76a99-f536-41ed-9207-1675843dbc37: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/5EDWv-CucvY?si=i1dMwl8UPMe5YaOG', '2026-06-16 21:19:10.647446')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 02:49:10,651 [INFO] Task 2af76a99-f536-41ed-9207-1675843dbc37 popped from queue to start downloading.
+2026-06-17 02:49:10,704 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:52:52,065 [INFO] Task c42fb26d-c6b9-47bf-a7a3-ebbcee4eafcc added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 02:52:52,150 [INFO] Task c42fb26d-c6b9-47bf-a7a3-ebbcee4eafcc popped from queue to start downloading.
+2026-06-17 02:52:52,218 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:53:35,242 [INFO] Task 440f5d05-16ac-4f62-bbfc-445373cbe6f8 added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 02:53:35,275 [INFO] Task 440f5d05-16ac-4f62-bbfc-445373cbe6f8 popped from queue to start downloading.
+2026-06-17 02:53:35,386 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 02:56:00,200 [INFO] Task c89fac24-8985-4f2e-86e8-57127b05c05e added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 02:56:00,306 [ERROR] Queue analytics log error for task c89fac24-8985-4f2e-86e8-57127b05c05e: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna', '2026-06-16 21:26:00.287301')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 02:56:00,320 [INFO] Task c89fac24-8985-4f2e-86e8-57127b05c05e popped from queue to start downloading.
+2026-06-17 02:56:00,516 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 03:01:20,095 [INFO] Task c89fac24-8985-4f2e-86e8-57127b05c05e cancellation requested.
+2026-06-17 03:01:21,613 [INFO] Task c89fac24-8985-4f2e-86e8-57127b05c05e cancellation requested.
+2026-06-17 03:01:55,843 [INFO] Task b9268506-b3d4-4b8c-980a-f39e5d3f945f added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 03:01:55,850 [ERROR] Queue analytics log error for task b9268506-b3d4-4b8c-980a-f39e5d3f945f: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna', '2026-06-16 21:31:55.848437')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 03:01:55,855 [INFO] Task b9268506-b3d4-4b8c-980a-f39e5d3f945f popped from queue to start downloading.
+2026-06-17 03:01:55,919 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 03:05:48,092 [INFO] Task 0ef907ee-07ab-4785-beb6-4a3d438071ac added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 03:05:48,266 [ERROR] Queue analytics log error for task 0ef907ee-07ab-4785-beb6-4a3d438071ac: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna', '2026-06-16 21:35:48.264660')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 03:05:48,271 [INFO] Task 0ef907ee-07ab-4785-beb6-4a3d438071ac popped from queue to start downloading.
+2026-06-17 03:05:48,379 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE
+2026-06-17 03:07:35,420 [INFO] Task e3843762-57b0-4b8f-bae0-0ae3e99611e4 added to queue. URL: https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna, Quality: 360, AudioOnly: False
+2026-06-17 03:07:35,434 [ERROR] Queue analytics log error for task e3843762-57b0-4b8f-bae0-0ae3e99611e4: (sqlite3.OperationalError) no such table: analytics
+[SQL: INSERT INTO analytics (user_id, event_type, video_url, timestamp) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'download_queued', 'https://youtu.be/bsfHnhlJqFA?si=TNxR6NIM0vks_Tna', '2026-06-16 21:37:35.432239')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-17 03:07:35,441 [INFO] Task e3843762-57b0-4b8f-bae0-0ae3e99611e4 popped from queue to start downloading.
+2026-06-17 03:07:35,580 [INFO] Using detected FFmpeg executable at: C:\ffmpeg\bin\ffmpeg.EXE

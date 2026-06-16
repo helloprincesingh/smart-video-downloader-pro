@@ -1,6 +1,7 @@
 import os
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request, redirect
 from flask_login import LoginManager
+from werkzeug.middleware.proxy_fix import ProxyFix
 from config import Config
 from app.database.db import db
 from app.models.user import User
@@ -10,6 +11,30 @@ def create_app():
                 template_folder='../templates', 
                 static_folder='../static')
     app.config.from_object(Config)
+    
+    # Configure ProxyFix for reverse proxies (Render, Heroku, etc.)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1, x_prefix=1)
+    
+    # Redirect HTTP to HTTPS in production
+    @app.before_request
+    def force_https():
+        if not app.debug:
+            proto = request.headers.get('X-Forwarded-Proto')
+            if proto == 'http':
+                url = request.url.replace('http://', 'https://', 1)
+                return redirect(url, code=301)
+                
+    # Add Security Headers to prevent mixed-content and other security vulnerabilities
+    @app.after_request
+    def add_security_headers(response):
+        # Only force upgrading insecure requests if we are actually accessed over HTTPS
+        if request.is_secure or request.headers.get('X-Forwarded-Proto') == 'https':
+            response.headers['Content-Security-Policy'] = "upgrade-insecure-requests"
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        if not app.debug:
+            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        return response
     
     # Initialize DB
     db.init_app(app)
@@ -54,6 +79,11 @@ def create_app():
     @app.route('/file/<filename>')
     def file(filename):
         return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+        
+    # Serve favicon.ico
+    @app.route('/favicon.ico')
+    def favicon():
+        return send_from_directory(app.static_folder, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
         
     # Custom 404/500 handlers
     @app.errorhandler(404)

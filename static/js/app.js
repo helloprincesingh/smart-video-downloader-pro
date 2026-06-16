@@ -160,8 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="download-options">
                             <div class="option-group">
                                 <select id="downloadQuality" class="select-control">
-                                    ${data.qualities.map(q => `<option value="${q.height}">${q.resolution} (${q.estimated_size})</option>`).join('')}
-                                    <option value="audio">Audio Only (${data.audio_size})</option>
+                                    ${data.qualities.map(q => `<option value="${q.height}">${q.resolution} | ${q.codec} | ${q.fps} | ${q.estimated_size}</option>`).join('')}
+                                    <option value="audio">Audio Only | MP3 | 192kbps | ${data.audio_size}</option>
                                 </select>
                                 <div style="display:flex; flex-direction:column; gap:8px;">
                                     <label class="checkbox-label" style="user-select:none;">
@@ -330,8 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Show success completion modal or summary summary
                     renderSummaryAlert(task);
                     
-                    // Trigger actual file download in browser
-                    const dlUrl = `/file/${encodeURIComponent(task.filename)}`;
+                    // Trigger actual file download in browser using window.location.origin to prevent mixed content/insecure errors
+                    const dlUrl = `${window.location.origin}/file/${encodeURIComponent(task.filename)}`;
                     
                     // Fetch the file as a blob to bypass "insecure download" warnings on HTTP connections
                     fetch(dlUrl)
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 } else if (task.status === 'completed') {
                     controlsHtml = `
-                        <a href="/file/${encodeURIComponent(task.filename)}" download class="ctrl-btn ctrl-btn-success" title="Save to Device" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; text-decoration: none;"><i class="fa-solid fa-download"></i></a>
+                        <a href="${window.location.origin}/file/${encodeURIComponent(task.filename)}" download class="ctrl-btn ctrl-btn-success" title="Save to Device" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; text-decoration: none;"><i class="fa-solid fa-download"></i></a>
                         <button onclick="controlQueueTask('${task.id}', 'remove')" class="ctrl-btn ctrl-btn-danger" title="Remove From List"><i class="fa-solid fa-trash"></i></button>
                     `;
                 } else if (task.status === 'failed' || task.status === 'cancelled') {
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div><strong>Saved:</strong><br>Downloads Folder</div>
                 </div>
                 <div style="display: flex; gap: 10px;">
-                    <a href="/file/${encodeURIComponent(task.filename)}" download class="nav-btn nav-btn-primary" style="border: none; padding: 8px 25px; cursor: pointer; flex: 1; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Save File</a>
+                    <a href="${window.location.origin}/file/${encodeURIComponent(task.filename)}" download class="nav-btn nav-btn-primary" style="border: none; padding: 8px 25px; cursor: pointer; flex: 1; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Save File</a>
                     <button onclick="this.parentElement.parentElement.parentElement.remove()" class="nav-btn nav-btn-outline" style="padding: 8px 25px; cursor: pointer; flex: 1; font-size: 14px;">Dismiss</button>
                 </div>
             </div>

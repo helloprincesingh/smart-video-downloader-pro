@@ -37,18 +37,11 @@ def rate_limit(limit=15, period=60):
 def is_valid_youtube_url(url):
     """
     Validates if a given URL is a YouTube video or playlist URL.
+    Supports standard, mobile, music, shorts, embedded, nocookie, and playlist links.
     """
     if not url:
         return False
         
-    youtube_regex = (
-        r'(https?://)?(www\.)?'
-        r'(youtube|youtu|youtube-nocookie)\.(com|be)/'
-        r'(watch\?v=|embed/|v/|shorts/|.+\?v=)?([^&=%\?]{11})?'
-    )
-    playlist_regex = r'[&?]list=([^#\&\?]+)'
-    
-    is_video = bool(re.match(youtube_regex, url))
-    is_playlist = 'list=' in url
-    
-    return is_video or is_playlist
+    # Clean check for secure/unsecure YouTube and youtu.be domains to prevent SSRF
+    youtube_domain_pattern = r'^(https?://)?(www\.|m\.|music\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com)/?'
+    return bool(re.match(youtube_domain_pattern, url, re.IGNORECASE))

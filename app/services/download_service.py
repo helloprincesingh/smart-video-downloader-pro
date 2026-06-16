@@ -1,6 +1,7 @@
 import os
 import uuid
 import threading
+import shutil
 import yt_dlp
 import logging
 from datetime import datetime, timezone
@@ -19,6 +20,26 @@ file_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
+
+def get_ffmpeg_path():
+    """Dynamically detect local/global FFmpeg installation."""
+    env_path = os.environ.get('FFMPEG_PATH')
+    if env_path and os.path.exists(env_path):
+        return env_path
+    path = shutil.which('ffmpeg')
+    if path:
+        return path
+    common_paths = [
+        r"C:\ffmpeg\bin\ffmpeg.exe",
+        r"C:\Program Files\ffmpeg\bin\ffmpeg.exe",
+        r"C:\Program Files (x86)\ffmpeg\bin\ffmpeg.exe",
+        os.path.join(os.getcwd(), 'ffmpeg.exe'),
+        os.path.join(os.getcwd(), 'ffmpeg', 'bin', 'ffmpeg.exe'),
+    ]
+    for p in common_paths:
+        if os.path.exists(p):
+            return p
+    return None
 
 def format_duration(seconds):
     """Convert seconds to HH:MM:SS or MM:SS string."""
@@ -66,14 +87,13 @@ class QueueManager:
             self.queued_ids.append(task_id)
             logger.info(f"Task {task_id} added to queue. URL: {url}, Quality: {quality}, AudioOnly: {audio_only}")
             
-        with app.app_context():
-            try:
+        try:
+            with app.app_context():
                 event = Analytics(user_id=user_id, event_type='download_queued', video_url=url)
                 db.session.add(event)
                 db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-                logger.error(f"Queue analytics log error for task {task_id}: {e}")
+        except Exception as e:
+            logger.error(f"Queue analytics log error for task {task_id}: {e}")
 
         # Start queue processing
         threading.Thread(target=self._process_queue, args=(app,), daemon=True).start()
@@ -280,37 +300,42 @@ class QueueManager:
             elif d['status'] == 'finished':
                 with self.lock:
                     self.tasks[task_id].update({
-                        'status': 'processing',
-                        'percent': 100
+                        'status': 'merging',
+                        'percent': 99.0
                     })
                 logger.info(f"Task {task_id} finished downloading. Post-processing/merging formats...")
 
+        ffmpeg_location = get_ffmpeg_path()
         ydl_opts = {
             'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
             'progress_hooks': [hook],
             'noprogress': True,
             'quiet': False,
-            'no_warnings': True,
+            'no_warnings': False,
             'nocheckcertificate': True,
             'socket_timeout': 30,               # Increased to 30 seconds connection timeout
-            'retries': 10,                      # 10 retries
-            'fragment_retries': 10,             # 10 fragment retries for DASH/HLS
-            'http_chunk_size': 1048576,         # 1MB chunk size (stable, limits throttling)
+            'retries': 20,                      # Increased retries to 20
+            'fragment_retries': 30,             # High fragment retries for DASH/HLS
             'nocachedir': True,                 # Prevent cache lock hangs on Windows
             'ignoreerrors': False,
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
                 'Accept-Language': 'en-US,en;q=0.9',
                 'Sec-Fetch-Mode': 'navigate',
             },
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'web'],
-                    'skip': ['dash', 'hls'],
+                    'player_client': ['android', 'web', 'ios'],
                 }
             }
         }
+        
+        if ffmpeg_location:
+            ydl_opts['ffmpeg_location'] = ffmpeg_location
+            logger.info(f"Using detected FFmpeg executable at: {ffmpeg_location}")
+        else:
+            logger.warning("FFmpeg was not detected! yt-dlp may fail to merge separate streams.")
         
         if task['audio_only']:
             ydl_opts.update({
@@ -322,8 +347,10 @@ class QueueManager:
                 }],
             })
         else:
+            target_q = task['quality']
+            # Select exact height video format and merge with bestaudio, fallback gracefully
             ydl_opts.update({
-                'format': f"bestvideo[height<={task['quality']}]+bestaudio/best[height<={task['quality']}]/best",
+                'format': f"bestvideo[height={target_q}]+bestaudio/bestvideo[height<={target_q}]+bestaudio/best[height<={target_q}]/best",
                 'merge_output_format': 'mp4',
             })
             
@@ -351,25 +378,28 @@ class QueueManager:
                 if os.path.exists(filepath):
                     file_size_mb = os.path.getsize(filepath) / (1024 * 1024)
                     
-                with app.app_context():
-                    hist = DownloadHistory(
-                        user_id=task['user_id'],
-                        video_title=info.get('title', 'Unknown Video'),
-                        video_url=task['url'],
-                        thumbnail_url=info.get('thumbnail'),
-                        quality='Audio (MP3)' if task['audio_only'] else f"{info.get('height', task['quality'])}p",
-                        file_format='audio' if task['audio_only'] else 'video',
-                        file_size_mb=round(file_size_mb, 2)
-                    )
-                    db.session.add(hist)
-                    
-                    event = Analytics(
-                        user_id=task['user_id'],
-                        event_type='download_success',
-                        video_url=task['url']
-                    )
-                    db.session.add(event)
-                    db.session.commit()
+                try:
+                    with app.app_context():
+                        hist = DownloadHistory(
+                            user_id=task['user_id'],
+                            video_title=info.get('title', 'Unknown Video'),
+                            video_url=task['url'],
+                            thumbnail_url=info.get('thumbnail'),
+                            quality='Audio (MP3)' if task['audio_only'] else f"{info.get('height', task['quality'])}p",
+                            file_format='audio' if task['audio_only'] else 'video',
+                            file_size_mb=round(file_size_mb, 2)
+                        )
+                        db.session.add(hist)
+                        
+                        event = Analytics(
+                            user_id=task['user_id'],
+                            event_type='download_success',
+                            video_url=task['url']
+                        )
+                        db.session.add(event)
+                        db.session.commit()
+                except Exception as db_exc:
+                    logger.error(f"Failed to record download success in database: {db_exc}")
                     
                 with self.lock:
                     self.tasks[task_id].update({
@@ -457,7 +487,7 @@ queue_manager = QueueManager()
 class DownloadService:
     @staticmethod
     def get_video_info(url):
-        """Fetch video metadata along with merged size estimations."""
+        """Fetch video metadata along with merged size estimations, FPS, and Codecs."""
         try:
             probe_opts = {
                 'quiet': True,
@@ -499,7 +529,7 @@ class DownloadService:
 
             formats = info.get('formats', [])
             
-            # Fetch best audio size
+            # Fetch best audio format to compute total size
             audio_formats = [f for f in formats
                              if f.get('vcodec') == 'none' and f.get('acodec') not in (None, 'none')]
             audio_size_bytes = 0
@@ -512,33 +542,64 @@ class DownloadService:
                     audio_size = f"{af_size / (1024*1024):.1f} MB"
 
             qualities = []
-            seen_heights = set()
+            seen_resolutions = set()  # Key format: (height, codec, fps)
+            
+            # Supported heights now include 1440p (2K), 2160p (4K), 4320p (8K)
+            supported_heights = [144, 240, 360, 480, 720, 1080, 1440, 2160, 4320]
 
             for f in formats:
                 height = f.get('height')
-                if height and height in [360, 480, 720, 1080]:
-                    if height not in seen_heights:
-                        seen_heights.add(height)
+                # We want adaptive video formats (vcodec != 'none')
+                if height and height in supported_heights and f.get('vcodec') != 'none':
+                    vcodec = f.get('vcodec', '')
+                    # Map codec short name
+                    codec_name = 'Unknown'
+                    if 'av01' in vcodec:
+                        codec_name = 'AV1'
+                    elif 'vp9' in vcodec or 'vp09' in vcodec:
+                        codec_name = 'VP9'
+                    elif 'avc' in vcodec or 'h264' in vcodec:
+                        codec_name = 'H264'
+                    
+                    fps = f.get('fps') or 30
+                    res_key = (height, codec_name, fps)
+                    
+                    if res_key not in seen_resolutions:
+                        seen_resolutions.add(res_key)
+                        
                         v_size = f.get('filesize') or f.get('filesize_approx') or 0
-                        total_bytes = v_size + audio_size_bytes
+                        # Estimated size includes audio size if separate streams
+                        total_bytes = v_size + audio_size_bytes if f.get('acodec') == 'none' else v_size
                         size_str = f"{total_bytes / (1024*1024):.1f} MB" if total_bytes else "N/A"
+                        
+                        resolution_lbl = f"{height}p"
+                        if height == 2160:
+                            resolution_lbl = "4K"
+                        elif height == 4320:
+                            resolution_lbl = "8K"
+                        elif height == 1440:
+                            resolution_lbl = "1440p (2K)"
+
                         qualities.append({
                             'height': height,
-                            'resolution': f"{height}p",
-                            'ext': 'mp4',
+                            'resolution': resolution_lbl,
+                            'codec': codec_name,
+                            'fps': f"{fps}fps",
+                            'ext': f.get('ext', 'mp4'),
                             'estimated_size': size_str,
                         })
 
-            qualities = sorted(qualities, key=lambda x: x['height'], reverse=True)
+            # Sort qualities by height (descending), then fps (descending)
+            qualities = sorted(qualities, key=lambda x: (x['height'], int(x['fps'].replace('fps', ''))), reverse=True)
 
             if not qualities:
                 qualities = [
-                    {'height': 1080, 'resolution': '1080p', 'ext': 'mp4', 'estimated_size': 'N/A'},
-                    {'height': 720,  'resolution': '720p',  'ext': 'mp4', 'estimated_size': 'N/A'},
-                    {'height': 480,  'resolution': '480p',  'ext': 'mp4', 'estimated_size': 'N/A'},
+                    {'height': 1080, 'resolution': '1080p', 'codec': 'H264', 'fps': '30fps', 'ext': 'mp4', 'estimated_size': 'N/A'},
+                    {'height': 720,  'resolution': '720p',  'codec': 'H264', 'fps': '30fps', 'ext': 'mp4', 'estimated_size': 'N/A'},
+                    {'height': 480,  'resolution': '480p',  'codec': 'H264', 'fps': '30fps', 'ext': 'mp4', 'estimated_size': 'N/A'},
+                    {'height': 360,  'resolution': '360p',  'codec': 'H264', 'fps': '30fps', 'ext': 'mp4', 'estimated_size': 'N/A'},
                 ]
 
-            # Parse upload date, view count, like count if available
             upload_date = info.get('upload_date')
             if upload_date:
                 try:
