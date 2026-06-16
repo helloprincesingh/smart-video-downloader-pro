@@ -205,11 +205,7 @@ class DownloadService:
             })
         else:
             ydl_opts.update({
-                'format': (
-                    f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]'
-                    f'/bestvideo[height<={quality}]+bestaudio'
-                    f'/best[height<={quality}]/best'
-                ),
+                'format': f'bestvideo[height<={quality}]+bestaudio/best',
                 'merge_output_format': 'mp4',
             })
 
@@ -221,8 +217,16 @@ class DownloadService:
             })
 
         try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+           with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=True)
+
+                print("=" * 50)
+                print("REQUESTED QUALITY:", quality)
+                print("DOWNLOADED HEIGHT:", info.get("height"))
+                print("FORMAT ID:", info.get("format_id"))
+                print("FORMAT:", info.get("format"))
+                print("=" * 50)
+
                 filename = ydl.prepare_filename(info)
 
                 # Correct extension after post-processing
